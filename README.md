@@ -1,5 +1,10 @@
 # Mail Micro API
 
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)
+![NestJS](https://img.shields.io/badge/built%20with-NestJS-e0234e.svg)
+![TypeScript](https://img.shields.io/badge/lang-TypeScript-3178c6.svg)
+
 Microsserviço de envio de e-mail transacional, construído para ser reutilizado por múltiplas aplicações (web, mobile, backends de terceiros) sem duplicar lógica de SMTP em cada projeto.
 
 Cada aplicação cliente recebe uma API key própria e envia requisições de e-mail de forma **fire-and-forget**: a API responde imediatamente e o envio é processado em background, com retries automáticos em caso de falha.
@@ -118,4 +123,4 @@ O projeto inclui `Dockerfile` e `render.yaml` prontos para deploy no [Render](ht
 
 ## Licença
 
-Uso interno / privado.
+[MIT](./LICENSE)
