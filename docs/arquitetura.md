@@ -22,7 +22,7 @@ MailController ──► MailService.enqueue()
                                        │
                                        ▼
                               MailerService.send(job)
-                                (nodemailer via SMTP)
+                                (Mailgun API HTTP)
                                        │
                     sucesso ──────────┼────────── falha
                        │                              │

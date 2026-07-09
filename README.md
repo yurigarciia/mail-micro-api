@@ -5,7 +5,7 @@
 ![NestJS](https://img.shields.io/badge/built%20with-NestJS-e0234e.svg)
 ![TypeScript](https://img.shields.io/badge/lang-TypeScript-3178c6.svg)
 
-Microsserviço de envio de e-mail transacional, construído para ser reutilizado por múltiplas aplicações (web, mobile, backends de terceiros) sem duplicar lógica de SMTP em cada projeto.
+Microsserviço de envio de e-mail transacional, construído para ser reutilizado por múltiplas aplicações (web, mobile, backends de terceiros) sem duplicar lógica de envio de e-mail em cada projeto.
 
 Cada aplicação cliente recebe uma API key própria e envia requisições de e-mail de forma **fire-and-forget**: a API responde imediatamente e o envio é processado em background, com retries automáticos em caso de falha.
 
@@ -13,7 +13,7 @@ Cada aplicação cliente recebe uma API key própria e envia requisições de e-
 
 - [NestJS](https://nestjs.com/) + TypeScript
 - [TypeORM](https://typeorm.io/) + PostgreSQL
-- [Nodemailer](https://nodemailer.com/) (SMTP)
+- [Mailgun](https://www.mailgun.com/) (API HTTP, via `mailgun.js`)
 - [Swagger](https://swagger.io/) para documentação interativa da API
 
 ## Arquitetura
@@ -30,7 +30,7 @@ MailController ──► MailService ──► grava EmailLog (PENDING) + enfile
                                     MailQueueService (fila em memória)
                                              │
                                              ▼
-                                     MailerService (nodemailer/SMTP)
+                                     MailerService (Mailgun API HTTP)
                                              │
                               sucesso ──► EmailLog.status = SENT
                               falha   ──► retry (até 3x, backoff) ou FAILED
@@ -94,10 +94,9 @@ Crie um arquivo `.env` na raiz do projeto:
 
 ```env
 DATABASE_URL=postgresql://user:password@host:5432/database
-SMTP_HOST=smtp.mailgun.org
-SMTP_PORT=587
-SMTP_USER=seu-usuario-smtp
-SMTP_PASSWORD=sua-senha-smtp
+MAILGUN_API_KEY=sua-api-key-do-mailgun
+MAILGUN_DOMAIN=seu-dominio-verificado.com
+MAILGUN_FROM=remetente@seu-dominio-verificado.com
 ADMIN_KEY=uma-chave-forte-para-gerenciar-clientes
 PORT=3000
 ```

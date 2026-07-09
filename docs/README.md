@@ -11,4 +11,4 @@
 
 ## Sobre este projeto
 
-A Mail Micro API é um microsserviço interno responsável exclusivamente por enviar e-mails transacionais, usado por diferentes aplicações (web, mobile, backends de clientes) para evitar duplicar lógica de SMTP em cada projeto. Cada aplicação consumidora recebe uma API key própria e chama a API de forma assíncrona (fire-and-forget).
+A Mail Micro API é um microsserviço interno responsável exclusivamente por enviar e-mails transacionais, usado por diferentes aplicações (web, mobile, backends de clientes) para evitar duplicar lógica de envio de e-mail em cada projeto. Cada aplicação consumidora recebe uma API key própria e chama a API de forma assíncrona (fire-and-forget).

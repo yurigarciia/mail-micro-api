@@ -7,10 +7,9 @@ Runbook para operar o serviço em produção: variáveis de ambiente, gestão de
 | Variável         | Obrigatória | Descrição                                                        |
 | ---------------- | ----------- | ------------------------------------------------------------------ |
 | `DATABASE_URL`   | Sim         | Connection string do PostgreSQL (ex: Neon)                        |
-| `SMTP_HOST`      | Sim         | Host SMTP (ex: `smtp.mailgun.org`)                                 |
-| `SMTP_PORT`      | Sim         | Porta SMTP (`587` para STARTTLS)                                   |
-| `SMTP_USER`      | Sim         | Usuário/remetente SMTP                                             |
-| `SMTP_PASSWORD`  | Sim         | Senha SMTP                                                          |
+| `MAILGUN_API_KEY`| Sim         | API key (Sending key) da conta Mailgun                            |
+| `MAILGUN_DOMAIN` | Sim         | Domínio verificado no Mailgun usado para envio                    |
+| `MAILGUN_FROM`   | Sim         | Endereço de e-mail remetente (deve pertencer ao `MAILGUN_DOMAIN`) |
 | `ADMIN_KEY`      | Sim         | Chave usada para autenticar `POST /clients` e `GET /clients`       |
 | `PORT`           | Não         | Porta HTTP da aplicação (definida automaticamente pelo Render)     |
 
@@ -66,8 +65,8 @@ Ausência de logs de warn/error para um envio geralmente indica sucesso na prime
 
 ## Cenários comuns
 
-**SMTP retornando erro de autenticação**
-Verifique se `SMTP_USER`/`SMTP_PASSWORD` ainda são válidos no provedor (Mailgun). Credenciais SMTP podem ser revogadas/alteradas independentemente da API key do Mailgun usada em outros lugares.
+**Mailgun retornando erro de autenticação**
+Verifique se `MAILGUN_API_KEY` ainda é válida no painel do Mailgun (Settings → API Keys) e se `MAILGUN_DOMAIN`/`MAILGUN_FROM` correspondem a um domínio verificado na conta.
 
 **Falha de conexão com o banco (Neon)**
 Bancos serverless como o Neon podem hibernar após inatividade — a primeira conexão após um período ocioso pode demorar alguns segundos. Isso é esperado e não indica um problema de configuração.

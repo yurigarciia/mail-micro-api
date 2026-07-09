@@ -31,10 +31,18 @@ Bancos serverless como o Neon hibernam após período de inatividade. A primeira
 ## E-mail aceito (`202`) mas nunca chegou
 
 1. Consulte o status real na tabela `email_log` pelo `id` retornado na resposta (veja query em [Operação](./operacao.md#monitorando-envios)).
-   - `SENT`: o SMTP aceitou a entrega — se o destinatário não recebeu, o problema é no lado do provedor de e-mail dele (spam, filtro, etc.), não no envio em si.
+   - `SENT`: o Mailgun aceitou a entrega — se o destinatário não recebeu, o problema é no lado do provedor de e-mail dele (spam, filtro, etc.), não no envio em si.
    - `FAILED`: veja a coluna `error` para o motivo da última tentativa.
    - `PENDING` com `attempts` > 0 parado: possivelmente o processo reiniciou no meio de um retry (veja [Arquitetura](./arquitetura.md#fila-em-memória-não-redisbullmq)) — o job foi perdido e precisa ser reenviado manualmente.
 2. Verifique os logs da aplicação por volta do horário do envio (mensagens de `warn`/`error` da fila).
+
+## `Connection timeout` ao enviar e-mail em produção
+
+**Sintoma:** localmente o envio funciona, mas em produção (Render ou outro PaaS) todo envio falha com `Connection timeout` após ~2 minutos, esgotando as 3 tentativas e caindo em `FAILED`.
+
+**Causa:** muitos provedores PaaS (Render incluído) bloqueiam tráfego de saída nas portas SMTP (25/465/587) por padrão, como medida antispam. Isso derruba qualquer tentativa de conexão SMTP direta, mesmo com credenciais corretas — o erro é de rede, não de autenticação.
+
+**Solução:** este é o motivo pelo qual o `MailerService` usa a **API HTTP do Mailgun** (`mailgun.js`, porta 443) em vez de SMTP direto — HTTP raramente é bloqueado por esses provedores. Se esse erro voltar a aparecer, confirme que o serviço ainda está configurado para usar a API HTTP (variáveis `MAILGUN_API_KEY`/`MAILGUN_DOMAIN`/`MAILGUN_FROM`) e não foi revertido para SMTP.
 
 ## `bcrypt` falha ao instalar/rodar (erro de binding nativo)
 
